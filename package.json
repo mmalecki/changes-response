@@ -1,5 +1,5 @@
 {
-  "name": "changes-response",
+  "name": "couchdb-changes-response",
   "version": "0.0.0",
   "author": "Maciej Małecki <me@mmalecki.com>",
   "license": "MIT"
