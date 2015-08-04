@@ -13,5 +13,8 @@
   "devDependencies": {
     "assert-called": "~0.1.2",
     "async": "~1.4.0"
+  },
+  "scripts": {
+    "test": "for i in test/*-test.js; do echo $i; node $i; done"
   }
 }
