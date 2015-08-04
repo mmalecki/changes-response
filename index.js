@@ -13,7 +13,7 @@ var ChangesResponse = module.exports = function(options) {
 
   if (self._heartbeat) {
     self._heartbeatInterval = setInterval(self._writeHeartbeat.bind(self), self._heartbeat)
-    self.once('end', function() {
+    self.once('finish', function() {
       clearInterval(self._heartbeatInterval)
     })
   }
