@@ -7,7 +7,6 @@ var ChangesResponse = module.exports = function(options) {
 
   self._type = options.type || 'normal'
   self._heartbeat = options.heartbeat || 60000
-  self._include_docs = options.include_docs || false
 
   assert(self._type === 'continuous', 'only continuous feed type is supported')
 
@@ -23,11 +22,8 @@ var ChangesResponse = module.exports = function(options) {
 util.inherits(ChangesResponse, Transform)
 
 ChangesResponse.prototype._transform = function(chunk, encoding, cb) {
-  if (!this._include_docs && chunk.doc) delete chunk.doc
-
   if (this._type === 'continuous')
     this.push(JSON.stringify(chunk) + '\n')
-
   cb()
 }
 
