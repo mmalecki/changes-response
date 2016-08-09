@@ -3,4 +3,28 @@
 
 Mimic CouchDB's `_changes` response in a streaming fashion.
 
-Heavily WIP, only continuous feed is supported.
+## Installation
+```sh
+npm i couchdb-changes-response
+```
+
+## Usage
+Please note: this module is heavily WIP, only continuous feed is supported
+right now.
+
+```js
+var ChangesResponse = require('couchdb-changes-response')
+
+var response = new ChangesResponse({
+  type: 'continuous'
+}))
+
+response.write({
+  id: 'foobar',
+  seq: 132,
+  doc: {
+    id: 'foobar',
+    bar: 'foo'
+  })
+})
+```
