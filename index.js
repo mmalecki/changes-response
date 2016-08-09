@@ -1,9 +1,11 @@
-var util = require('util')
-var assert = require('assert')
-var Transform = require('stream').Transform
+'use strict'
 
-var ChangesResponse = module.exports = function(options) {
-  var self = this
+const util = require('util')
+const assert = require('assert')
+const Transform = require('stream').Transform
+
+const ChangesResponse = module.exports = function(options) {
+  const self = this
 
   self._type = options.type || 'normal'
   self._heartbeat = options.heartbeat || 60000

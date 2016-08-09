@@ -1,20 +1,22 @@
-var assert = require('assert')
-var async = require('async')
-var assertCalled = require('assert-called')
-var CouchDBChangesResponse = require('../')
+'use strict'
 
-var HEARTBEAT = 100
+const assert = require('assert')
+const async = require('async')
+const assertCalled = require('assert-called')
+const CouchDBChangesResponse = require('../')
 
-;['continuous'].forEach(function(feedType) {
-  var d = Date.now()
+const HEARTBEAT = 100
 
-  var stream = new CouchDBChangesResponse({
+;['continuous'].forEach((feedType) => {
+  const d = Date.now()
+
+  const stream = new CouchDBChangesResponse({
     type: 'continuous',
     heartbeat: HEARTBEAT
   })
 
-  stream.once('readable', assertCalled(function() {
-    var chunk = stream.read()
+  stream.once('readable', assertCalled(() => {
+    const chunk = stream.read()
     assert.equal(chunk.toString(), '\n')
     assert(Date.now() - d <= HEARTBEAT * 2)
     stream.end()
