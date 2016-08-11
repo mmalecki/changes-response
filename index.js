@@ -11,7 +11,7 @@ const ChangesResponse = module.exports = function(options) {
 
   self._type = options.type || 'normal'
   assert(
-    ['continuous', 'normal'].indexOf(self._type) !== -1,
+    ChangesResponse.SUPPORTED_TYPES.indexOf(self._type) !== -1,
     'only normal and continuous feed type are supported'
   )
 
@@ -33,6 +33,8 @@ const ChangesResponse = module.exports = function(options) {
   if (this._type === 'normal') this.end = ChangesResponse.prototype._normalEnd
 }
 util.inherits(ChangesResponse, Duplex)
+
+ChangesResponse.SUPPORTED_TYPES = ['continuous', 'normal']
 
 ChangesResponse.prototype._write = function(chunk, encoding, cb) {
   var stringified = JSON.stringify(chunk)
