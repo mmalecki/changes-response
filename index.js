@@ -62,8 +62,12 @@ ChangesResponse.prototype._writeHeartbeat = function() {
 ChangesResponse.prototype._normalEnd = function (chunk, encoding, cb) {
   var self = this
 
-  self._write(chunk, encoding, () => {
+  function end(err) {
+    if (err) return cb(err)
     self.push('\n],\n"last_seq":' + self._lastSeq + '}')
     Duplex.prototype.end.call(self, cb)
-  })
+  }
+
+  if (chunk) self._write(chunk, encoding, end)
+  else end()
 }
