@@ -36,4 +36,6 @@ stream.once('finish', assertCalled(() => {
 }))
 
 stream.write(changes[0])
-stream.end(changes[1])
+stream.write(changes[1])
+stream.write({ last_seq: changes[1].seq })
+stream.end()

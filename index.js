@@ -39,11 +39,16 @@ ChangesResponse.SUPPORTED_TYPES = ['continuous', 'normal']
 ChangesResponse.prototype._write = function(chunk, encoding, cb) {
   var stringified = JSON.stringify(chunk)
 
-  this._lastSeq = chunk.seq
+  this._lastSeq = chunk.seq || chunk.last_seq
 
   if (this._type === 'continuous')
     this.push(stringified + '\n')
   else if (this._type === 'normal') {
+    const chunkKeys = Object.keys(chunk)
+    // Skip on `last_seq` changes if they are fed to us. This provides us
+    // the ability to seemlessly transform a continuous stream with a timeout
+    // set into a normal changes response.
+    if (chunkKeys.length === 1 && chunkKeys[0] === 'last_seq') return cb()
     if (!this._isFirstSeq) this.push(',\n')
     this.push(stringified)
   }
