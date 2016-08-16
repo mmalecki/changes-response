@@ -69,7 +69,7 @@ ChangesResponse.prototype._normalEnd = function (chunk, encoding, cb) {
 
   function end(err) {
     if (err) return cb(err)
-    self.push('\n],\n"last_seq":' + self._lastSeq + '}')
+    self.push('\n],\n"last_seq":' + self._lastSeq + '}\n')
     Duplex.prototype.end.call(self, cb)
   }
 
