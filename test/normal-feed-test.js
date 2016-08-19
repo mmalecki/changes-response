@@ -31,7 +31,7 @@ stream.once('readable', assertCalled(() => {
 stream.once('finish', assertCalled(() => {
   assert.deepEqual(JSON.parse(chunks.join('')), {
     results: changes,
-    last_seq: 14
+    last_seq: changes[1].seq
   })
 }))
 
