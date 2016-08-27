@@ -1,6 +1,6 @@
 {
   "name": "couchdb-changes-response",
-  "version": "0.3.3",
+  "version": "0.3.3-1",
   "description": "Mimic CouchDB's `_changes` response in a streaming fashion",
   "author": "Maciej Małecki <me@mmalecki.com>",
   "license": "MIT",
