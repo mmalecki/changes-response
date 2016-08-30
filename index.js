@@ -29,8 +29,6 @@ const ChangesResponse = module.exports = function(options) {
       clearInterval(self._heartbeatInterval)
     })
   }
-
-  if (this._type === 'normal') this.end = ChangesResponse.prototype._normalEnd
 }
 util.inherits(ChangesResponse, Duplex)
 
@@ -41,13 +39,21 @@ ChangesResponse.prototype._write = function(chunk, encoding, cb) {
 
   this._lastSeq = chunk.seq || chunk.last_seq
 
-  if (this._type === 'continuous')
+  if (this._type === 'continuous') {
     this.push(stringified + '\n')
+
+    if (chunk.last_seq !== undefined && Object.keys(chunk).length === 1)
+      this.push(null)
+  }
   else if (this._type === 'normal') {
     // Skip on `last_seq` changes if they are fed to us. This provides us
     // the ability to seemlessly transform a continuous stream with a timeout
     // set into a normal changes response.
-    if (chunk.last_seq !== undefined && Object.keys(chunk).length === 1) return cb()
+    if (chunk.last_seq !== undefined && Object.keys(chunk).length === 1) {
+      this.push('\n],\n"last_seq":' + this._lastSeq + '}\n')
+      this.push(null)
+      return cb()
+    }
     if (!this._isFirstSeq) this.push(',\n')
     this.push(stringified)
   }
@@ -61,18 +67,4 @@ ChangesResponse.prototype._read = function () {}
 
 ChangesResponse.prototype._writeHeartbeat = function() {
   this.push('\n')
-}
-
-ChangesResponse.prototype._normalEnd = function (chunk, encoding, cb) {
-  var self = this
-
-  function end(err) {
-    if (err) return cb(err)
-    self.push('\n],\n"last_seq":' + self._lastSeq + '}\n')
-    self.push(null)
-    Duplex.prototype.end.call(self, cb)
-  }
-
-  if (chunk) self._write(chunk, encoding, end)
-  else end()
 }
