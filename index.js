@@ -19,6 +19,7 @@ const ChangesResponse = module.exports = function(options) {
   // we don't either.
   self._heartbeat = options.heartbeat || 60000
   self._lastSeq = options.since || 0
+  self._includeDocs = options.includeDocs
   self._isFirstSeq = true
 
   if (self._type === 'normal') self.push('{"results":[\n');
@@ -35,7 +36,14 @@ util.inherits(ChangesResponse, Duplex)
 ChangesResponse.SUPPORTED_TYPES = ['continuous', 'normal']
 
 ChangesResponse.prototype._write = function(chunk, encoding, cb) {
-  var stringified = JSON.stringify(chunk)
+  var stringified = JSON.stringify({
+    id: chunk.id,
+    seq: chunk.seq,
+    changes: chunk.changes,
+    deleted: chunk.deleted,
+    doc: this._includeDocs === false ? undefined : chunk.doc,
+    last_seq: chunk.last_seq,
+  })
 
   this._lastSeq = chunk.seq || chunk.last_seq
 
