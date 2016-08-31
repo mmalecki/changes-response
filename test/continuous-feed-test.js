@@ -6,7 +6,8 @@ const CouchDBChangesResponse = require('../')
 
 const change = {
   id: 'foo',
-  changes: [{ rev: '2-578db51f2d332dd53a5ca02cf6ca5b54' }]
+  changes: [{ rev: '2-578db51f2d332dd53a5ca02cf6ca5b54' }],
+  doc: { id: 'foo' }
 }
 
 const stream = new CouchDBChangesResponse({
